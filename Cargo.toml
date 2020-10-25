@@ -7,5 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand="*"
-log="*"
+
+
+[profile.release]
+opt-level = 3 
+lto = "fat"
+codegen-units = 1

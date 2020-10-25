@@ -2,7 +2,6 @@
 #docker build . -t rustapp
 #docker build . -t rustapp --build-arg name=appserver
 #docker run --rm -it rustapp
-#docker run --rm -it rustapp ldd /home/rustapp/app_exe/appserver
 
 #dev
 FROM rust_musl AS builder
@@ -10,7 +9,7 @@ FROM rust_musl AS builder
 # Cargo.toml package name
 ARG name=appserver 
 
-#add build time depends 
+#add build time depends  here
 #RUN apk  add --no-cache  packagename 
 
 #build dep
@@ -27,21 +26,25 @@ RUN cargo build --release --target x86_64-unknown-linux-musl
 FROM alpine:latest
 
 # Cargo.toml package name
-ARG name=appserver 
+#ARG name=appserver 
 
 RUN addgroup -g 1000 rustapp
 RUN adduser -D -s /bin/sh -u 1000 -G rustapp rustapp
 
-WORKDIR /home/rustapp/app_exe
+WORKDIR /home/rustapp/app
+RUN mkdir resources
 
-#add runtime depends  
+#add runtime depends  here
 #RUN apk  add --no-cache  packagename 
 
-#copy bin and resources
-COPY --from=builder /usr/src/rustapp/cargo_dir/target/x86_64-unknown-linux-musl/release/"${name}" ./appexe
+#copy bin and resources here
+COPY --from=builder /usr/src/rustapp/cargo_dir/target/x86_64-unknown-linux-musl/release/"${name}" ./
+COPY resources resources
 
-RUN chown  -R rustapp:rustapp . 
-
+RUN chmod +x ./resources/docker_entrypoint.sh
+RUN chown  -R rustapp:rustapp .
+    
 USER rustapp
 
-CMD ["./appexe"]
+ENTRYPOINT ["./resources/docker_entrypoint.sh"]
+#CMD [""]

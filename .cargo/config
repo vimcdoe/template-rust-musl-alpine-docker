@@ -1,5 +1,11 @@
 [source.crates-io]
-replace-with = 'tuna'
+replace-with = 'rustcc'
 
-[source.tuna]
-registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+[source.rustcc]
+registry = "git://crates.rustcc.com/crates.io-index"
+
+
+[profile.release]
+opt-level = 3 
+lto = "fat"
+codegen-units = 1
