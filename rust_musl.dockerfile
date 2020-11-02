@@ -1,6 +1,6 @@
 #
 #docker build . -t rust_musl -f rust_musl.dockerfile 
-FROM alpine:latest AS rust_musl
+FROM alpine:3.12.1 AS rust_musl
 
 #  arg
 ARG RUST_VERSION=1.47.0

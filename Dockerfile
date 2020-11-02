@@ -23,7 +23,7 @@ COPY src src
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 #rust app deploy
-FROM alpine:latest
+FROM alpine:3.12.1
 
 # Cargo.toml package name
 #ARG name=appserver 
@@ -43,7 +43,7 @@ COPY resources resources
 
 RUN chmod +x ./resources/docker_entrypoint.sh
 RUN chown  -R rustapp:rustapp .
-    
+
 USER rustapp
 
 ENTRYPOINT ["./resources/docker_entrypoint.sh"]
